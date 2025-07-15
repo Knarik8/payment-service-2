@@ -21,6 +21,7 @@ public final class HttpServer {
      * Порт сервера.
      */
     private static final int SERVER_PORT = 8080;
+    private final String unusedField = "I am not used";
 
     private HttpServer() {
     }
