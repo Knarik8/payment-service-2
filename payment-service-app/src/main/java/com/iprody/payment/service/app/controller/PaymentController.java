@@ -23,7 +23,6 @@ public class PaymentController {
 
     @GetMapping
     public List<Payment> getPayments() {
-        nonExistentMethod();
         return new ArrayList<>(paymentStorage.values());
     }
 
