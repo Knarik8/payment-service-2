@@ -5,8 +5,7 @@ public class Payment {
     private long id;
     private double value;
 
-    public Payment(){
-
+    public Payment() {
     }
 
     public Payment(long id, double value) {
