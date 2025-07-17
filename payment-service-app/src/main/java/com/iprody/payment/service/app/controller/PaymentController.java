@@ -18,9 +18,7 @@ public class PaymentController {
     private final Payment payment1 = new Payment(2L, 299.99);
     private final Payment payment2 = new Payment(3L, 399.99);
     private final Payment payment3 = new Payment(4L, 499.99);
-
-    private final Map<Long, Payment> paymentStorage = Map.of(
-            1L, payment, 2L, payment1, 3L, payment2, 4L, payment3);
+    private final Map<Long, Payment> paymentStorage = Map.of(1L, payment, 2L, payment1, 3L, payment2, 4L, payment3);
 
     @GetMapping
     public List<Payment> getPayments() {
