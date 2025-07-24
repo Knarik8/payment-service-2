@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  payment-service-app:
-    image: payment-service-app
-    ports:
-      - "8080:8080"
+#  payment-service-app:
+#    image: payment-service-app
+#    ports:
+#      - "8080:8080"
 
   postgres:
     image: postgres:16
@@ -14,7 +14,7 @@ services:
       POSTGRES_PASSWORD: secret # пароль
       POSTGRES_DB: payment-db # имя БД по умолчанию
     ports:
-      - "5432:5432" # проброс порта PostgreSQL
+      - "5433:5432" # проброс порта PostgreSQL
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
