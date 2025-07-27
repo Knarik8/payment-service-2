@@ -12,11 +12,11 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "payment")
+@Table(name = "payments")
 public class Payment {
 
     @Id
-    @Column(nullable = false, unique = true, name = "id")
+    @Column(nullable = false, unique = true, name = "guid")
     private UUID guid;
 
     @Column(nullable = false, name = "inquiry_ref_id")
