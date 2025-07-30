@@ -3,3 +3,23 @@ server:
 spring:
   application:
     name: payment-service-app
+  datasource: # объединяет в себе параметры подключения к БД
+    url: jdbc:postgresql://localhost:5433/payment-db # URL подключения к БД
+    username: admin # Имя пользователя
+    password: secret # Пароль
+    driver-class-name: org.postgresql.Driver # класс jdbc драйвера
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true # Показывать SQL-запросы в консоли
+    properties:
+      hibernate:
+        format_sql: true # Форматировать SQL для читаемости
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+logging:
+  level.org.hibernate.sql=D
