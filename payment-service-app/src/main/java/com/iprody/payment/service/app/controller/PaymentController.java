@@ -1,12 +1,9 @@
 package com.iprody.payment.service.app.controller;
 
+import com.iprody.payment.service.app.dto.PaymentDto;
 import com.iprody.payment.service.app.persistence.PaymentFilterDto;
-import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
-import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
-import com.iprody.payment.service.app.repository.PaymentRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.iprody.payment.service.app.service.PaymentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +22,14 @@ import java.util.UUID;
 @RequestMapping("/payments")
 public class PaymentController {
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+    private final PaymentService paymentService;
+
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
 
     @GetMapping("/all")
-    public Page<Payment> getAll(
+    public Page<PaymentDto> getAll(
             @ModelAttribute PaymentFilterDto paymentFilterDto,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
@@ -43,21 +43,17 @@ public class PaymentController {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return paymentRepository.findAll(
-                PaymentFilterFactory.fromFilter(paymentFilterDto),
-                pageable
-        );
-
+        return paymentService.getAll(paymentFilterDto,
+                pageable);
     }
 
     @GetMapping("/{guid}")
-    public Payment getById(@PathVariable UUID guid) {
-        return paymentRepository.findById(guid)
-                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id " + guid));
+    public PaymentDto getById(@PathVariable UUID guid) {
+        return paymentService.getById(guid);
     }
 
     @GetMapping("/by_status/{status}")
-    public List<Payment> getByStatus(@PathVariable PaymentStatus status){
-        return paymentRepository.findByStatus(status);
+    public List<PaymentDto> getByStatus(@PathVariable PaymentStatus status){
+        return paymentService.getByStatus(status);
     }
 }
