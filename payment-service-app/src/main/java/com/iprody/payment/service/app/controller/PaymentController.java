@@ -5,6 +5,7 @@ import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
 import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
 import com.iprody.payment.service.app.repository.PaymentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -51,8 +51,9 @@ public class PaymentController {
     }
 
     @GetMapping("/{guid}")
-    public Optional<Payment> getById(@PathVariable UUID guid) {
-        return paymentRepository.findById(guid);
+    public Payment getById(@PathVariable UUID guid) {
+        return paymentRepository.findById(guid)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id " + guid));
     }
 
     @GetMapping("/by_status/{status}")
