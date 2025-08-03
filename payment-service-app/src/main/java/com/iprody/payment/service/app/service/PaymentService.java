@@ -8,6 +8,7 @@ import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
 import com.iprody.payment.service.app.repository.PaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class PaymentService {
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
 
-
+    @Autowired
     public PaymentService(PaymentMapper paymentMapper, PaymentRepository paymentRepository) {
         this.paymentMapper = paymentMapper;
         this.paymentRepository = paymentRepository;
