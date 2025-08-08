@@ -47,4 +47,33 @@ public class PaymentService {
                 .map(paymentMapper::toDto)
                 .toList();
     }
+
+    public PaymentDto create(PaymentDto dto) {
+        Payment entity = paymentMapper.toEntity(dto);
+        Payment saved = paymentRepository.save(entity);
+        return paymentMapper.toDto(saved);
+    }
+
+    public PaymentDto update(UUID guid, PaymentDto dto) {
+        Payment existing = paymentRepository.findById(guid)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found: " + guid));
+        Payment updated = paymentMapper.toEntity(dto);
+        updated.setGuid(guid);
+        Payment saved = paymentRepository.save(updated);
+        return paymentMapper.toDto(saved);
+    }
+
+    public void delete(UUID guid) {
+        if (!paymentRepository.existsById(guid)) {
+            throw new EntityNotFoundException("Payment not found: " + guid);
+        }
+        paymentRepository.deleteById(guid);
+    }
+
+    public PaymentDto updateNote(UUID guid, String newNote) {
+        PaymentDto dto = getById(guid);
+        dto.setNote(newNote);
+        return update(guid, dto);
+    }
 }
+

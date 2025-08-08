@@ -8,11 +8,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -56,4 +63,31 @@ public class PaymentController {
     public List<PaymentDto> getByStatus(@PathVariable PaymentStatus status){
         return paymentService.getByStatus(status);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PaymentDto create(@RequestBody PaymentDto dto) {
+        return paymentService.create(dto);
+    }
+
+    @PutMapping("/{guid}")
+    public PaymentDto update(@PathVariable UUID guid, @RequestBody
+    PaymentDto dto) {
+        return paymentService.update(guid, dto);
+    }
+
+    @DeleteMapping("/{guid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable UUID guid) {
+        paymentService.delete(guid);
+    }
+
+    @PatchMapping("/{guid}/note")
+    public PaymentDto updateNote(
+            @PathVariable UUID guid,
+            @RequestBody String note
+    ) {
+        return paymentService.updateNote(guid, note);
+    }
 }
+
