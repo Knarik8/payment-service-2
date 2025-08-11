@@ -1,0 +1,55 @@
+➜  ~ curl -X GET "http://localhost:8080/payments/9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d"
+{"guid":"9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d","inquiryRefId":"0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e","amount":220.00,"currency":"GBP","transactionRefId":"1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f","status":"APPROVED","note":"\"Updated comment text\"","createdAt":"2025-07-22T06:50:00Z","updatedAt":"2025-07-22T06:50:00Z"}%
+
+➜  ~ curl "http://localhost:8080/payments/all?page=0&size=3&sortBy=createdAt&direction=desc" \
+     -H "Accept: application/json"
+{"content":[{"guid":"1e2a3b4c-5d6e-7f80-9a0b-1c2d3e4f5a6b","inquiryRefId":"2a3b4c5d-6e7f-809a-0b1c-2d3e4f5a6b7c","amount":150.00,"currency":"EUR","transactionRefId":"3b4c5d6e-7f80-9a0b-1c2d-3e4f5a6b7c8d","status":"PENDING","note":"Оплата за услуги","createdAt":"2025-07-30T12:00:00Z","updatedAt":"2025-07-30T12:00:00Z"},
+{"guid":"2b3c4d5e-6f70-819a-0b1c-2d3e4f5a6b7c","inquiryRefId":"3c4d5e6f-7081-9a0b-1c2d-3e4f5a6b7c8d","amount":200.50,"currency":"USD","transactionRefId":"4d5e6f70-819a-0b1c-2d3e-4f5a6b7c8d9e","status":"PENDING","note":"Покупка товара","createdAt":"2025-07-29T07:30:00Z","updatedAt":"2025-07-29T07:30:00Z"},
+{"guid":"3c4d5e6f-7081-9a0b-1c2d-3e4f5a6b7c8d","inquiryRefId":"4d5e6f70-819a-0b1c-2d3e-4f5a6b7c8d9e","amount":75.25,"currency":"GBP","transactionRefId":"5e6f7081-9a0b-1c2d-3e4f-5a6b7c8d9e0f","status":"APPROVED","note":"Ошибка при оплате","createdAt":"2025-07-28T06:15:00Z","updatedAt":"2025-07-28T06:15:00Z"}],
+"pageable":{"pageNumber":0,"pageSize":3,"sort":{"empty":false,"unsorted":false,"sorted":true},"offset":0,"unpaged":false,"paged":true},"last":false,"totalPages":4,"totalElements":11,"first":true,"size":3,"number":0,"sort":{"empty":false,"unsorted":false,"sorted":true},"numberOfElements":3,"empty":false}%
+
+➜  ~ curl "http://localhost:8080/payments/by_status/APPROVED" \
+     -H "Accept: application/json"
+[{"guid":"3c4d5e6f-7081-9a0b-1c2d-3e4f5a6b7c8d","inquiryRefId":"4d5e6f70-819a-0b1c-2d3e-4f5a6b7c8d9e","amount":75.25,"currency":"GBP","transactionRefId":"5e6f7081-9a0b-1c2d-3e4f-5a6b7c8d9e0f","status":"APPROVED","note":"Ошибка при оплате","createdAt":"2025-07-28T06:15:00Z","updatedAt":"2025-07-28T06:15:00Z"},
+{"guid":"6f70819a-0b1c-2d3e-4f5a-6b7c8d9e0f1a","inquiryRefId":"70819a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b","amount":50.00,"currency":"GBP","transactionRefId":"819a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c","status":"APPROVED","note":"Недостаточно средств","createdAt":"2025-07-25T05:00:00Z","updatedAt":"2025-07-25T05:00:00Z"},
+{"guid":"9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d","inquiryRefId":"0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e","amount":220.00,"currency":"GBP","transactionRefId":"1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f","status":"APPROVED","note":"\"Updated comment text\"","createdAt":"2025-07-22T06:50:00Z","updatedAt":"2025-07-22T06:50:00Z"}]%
+
+➜  ~ curl -X POST "http://localhost:8080/payments" \
+     -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "inquiryRefId": "11111111-2222-3333-4444-555555555555",
+           "amount": 123.45,
+           "currency": "USD",
+           "transactionRefId": "66666666-7777-8888-9999-000000000000",
+           "status": "PENDING",
+           "note": "Initial payment",
+           "createdAt": "2025-08-08T12:34:56+03:00",
+           "updatedAt": "2025-08-08T12:34:56+03:00"
+         }'
+{"guid":"d9d679cf-6701-4aab-970b-633dac84f4fb","inquiryRefId":"11111111-2222-3333-4444-555555555555","amount":123.45,"currency":"USD","transactionRefId":"66666666-7777-8888-9999-000000000000","status":"PENDING","note":"Initial payment","createdAt":"2025-08-08T09:34:56Z","updatedAt":"2025-08-08T09:34:56Z"}%
+
+
+➜  ~ curl -X PUT "http://localhost:8080/payments/ba577de0-170a-4a0a-b107-cad961a33725" \
+     -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "guid": "ba577de0-170a-4a0a-b107-cad961a33725",
+           "inquiryRefId": "11111111-2222-3333-4444-555555555555",
+           "amount": 150.00,
+           "currency": "EUR",
+           "transactionRefId": "66666666-7777-8888-9999-000000000000",
+           "status": "PENDING",
+           "note": "Payment updated manually",
+           "createdAt": "2025-08-08T19:17:26.375+00:00",
+           "updatedAt": "2025-08-08T20:30:00.000+00:00"
+         }'
+{"guid":"ba577de0-170a-4a0a-b107-cad961a33725","inquiryRefId":"11111111-2222-3333-4444-555555555555","amount":150.00,"currency":"EUR","transactionRefId":"66666666-7777-8888-9999-000000000000","status":"PENDING","note":"Payment updated manually","createdAt":"2025-08-08T19:17:26.375Z","updatedAt":"2025-08-08T20:30:00Z"}%
+
+➜  ~ curl -X PATCH "http://localhost:8080/payments/ba577de0-170a-4a0a-b107-cad961a33725/note" \
+     -H "Accept: application/json" \
+     -H "Content-Type: text/plain" \
+     -d "This is updated note"
+{"guid":"ba577de0-170a-4a0a-b107-cad961a33725","inquiryRefId":"11111111-2222-3333-4444-555555555555","amount":150.00,"currency":"EUR","transactionRefId":"66666666-7777-8888-9999-000000000000","status":"PENDING","note":"This is updated note","createdAt":"2025-08-08T19:17:26.375Z","updatedAt":"2025-08-08T20:30:00Z"}%
+
+➜  ~ curl -X DELETE "http://localhost:8080/payments/ba577de0-170a-4a0a-b107-cad961a33725"
