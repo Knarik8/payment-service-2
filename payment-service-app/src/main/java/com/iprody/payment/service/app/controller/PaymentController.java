@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,6 +37,7 @@ public class PaymentController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN','READER')")
     public Page<PaymentDto> getAll(
             @ModelAttribute PaymentFilterDto paymentFilterDto,
             @RequestParam(defaultValue = "0") int page,
@@ -55,22 +57,26 @@ public class PaymentController {
     }
 
     @GetMapping("/{guid}")
+    @PreAuthorize("hasAnyRole('ADMIN','READER')")
     public PaymentDto getById(@PathVariable UUID guid) {
         return paymentService.getById(guid);
     }
 
     @GetMapping("/by_status/{status}")
+    @PreAuthorize("hasAnyRole('ADMIN','READER')")
     public List<PaymentDto> getByStatus(@PathVariable PaymentStatus status){
         return paymentService.getByStatus(status);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public PaymentDto create(@RequestBody PaymentDto dto) {
         return paymentService.create(dto);
     }
 
     @PutMapping("/{guid}")
+    @PreAuthorize("hasRole('ADMIN')")
     public PaymentDto update(@PathVariable UUID guid, @RequestBody
     PaymentDto dto) {
         return paymentService.update(guid, dto);
@@ -78,11 +84,13 @@ public class PaymentController {
 
     @DeleteMapping("/{guid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable UUID guid) {
         paymentService.delete(guid);
     }
 
     @PatchMapping("/{guid}/note")
+    @PreAuthorize("hasRole('ADMIN')")
     public PaymentDto updateNote(
             @PathVariable UUID guid,
             @RequestBody String note
