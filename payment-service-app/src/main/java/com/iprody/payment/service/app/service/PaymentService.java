@@ -1,13 +1,13 @@
 package com.iprody.payment.service.app.service;
 
 import com.iprody.payment.service.app.dto.PaymentDto;
+import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.mapper.PaymentMapper;
 import com.iprody.payment.service.app.persistence.PaymentFilterDto;
 import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
 import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
 import com.iprody.payment.service.app.repository.PaymentRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +30,7 @@ public class PaymentService {
 
     public PaymentDto getById(UUID guid) {
         Payment payment = paymentRepository.findById(guid)
-                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id " + guid));
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found", "getById", guid));
         return paymentMapper.toDto(payment);
     }
 
