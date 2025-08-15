@@ -56,7 +56,7 @@ public class PaymentService {
 
     public PaymentDto update(UUID guid, PaymentDto dto) {
         Payment existing = paymentRepository.findById(guid)
-                .orElseThrow(() -> new EntityNotFoundException("Payment not found: " + guid));
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found", "update", guid));
         Payment updated = paymentMapper.toEntity(dto);
         updated.setGuid(guid);
         Payment saved = paymentRepository.save(updated);
@@ -65,7 +65,7 @@ public class PaymentService {
 
     public void delete(UUID guid) {
         if (!paymentRepository.existsById(guid)) {
-            throw new EntityNotFoundException("Payment not found: " + guid);
+            throw new EntityNotFoundException("Payment not found", "delete", guid);
         }
         paymentRepository.deleteById(guid);
     }
