@@ -1,12 +1,12 @@
 package com.iprody.payment.service.app.service;
 
 import com.iprody.payment.service.app.dto.PaymentDto;
+import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.mapper.PaymentMapper;
 import com.iprody.payment.service.app.persistence.PaymentFilterDto;
 import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
 import com.iprody.payment.service.app.repository.PaymentRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -160,7 +160,9 @@ class PaymentServiceTest {
         );
 
         //then
-        assertTrue(ex.getMessage().contains("Payment not found with id " + guid));
+        assertTrue(ex.getMessage().contains("Payment not found"));
+        assertEquals("getById", ex.getOperation());
+        assertEquals(guid, ex.getEntityId());
         verify(paymentRepository).findById(guid);
     }
 
