@@ -160,7 +160,9 @@ class PaymentServiceTest {
         );
 
         //then
-        assertTrue(ex.getMessage().contains("Payment not found with id " + guid));
+        assertTrue(ex.getMessage().contains("Payment not found"));
+        assertEquals("getById", ex.getOperation());
+        assertEquals(guid, ex.getEntityId());
         verify(paymentRepository).findById(guid);
     }
 
