@@ -13,20 +13,15 @@
     </module>
 
     <module name="TreeWalker">
-
-        <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
-        <module name="FinalLocalVariable"/>
         <module name="UnusedImports"/>
-
         <module name="Indentation">
             <property name="basicOffset" value="4"/>
-            <property name="braceAdjustment" value="0"/>
+            <property name="braceAdjustment" value="4"/>
             <property name="caseIndent" value="4"/>
             <property name="throwsIndent" value="4"/>
             <property name="arrayInitIndent" value="4"/>
-            <property name="lineWrappingIndentation" value="4"/>
-            <property name="forceStrictCondition" value="true"/>
+            <property name="lineWrappingIndentation" value="8"/>
+            <property name="forceStrictCondition" value="false"/>
         </module>
 
         <module name="ParenPad">
@@ -42,7 +37,10 @@
         </module>
         <module name="FallThrough"/>
         <module name="MissingSwitchDefault"/>
-        <module name="AvoidInlineConditionals"/>
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="TYPECAST"/>
+            <property name="allowLineBreaks" value="false"/>
+        </module>
     </module>
 
 </module>

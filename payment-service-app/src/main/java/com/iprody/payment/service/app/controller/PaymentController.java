@@ -48,8 +48,7 @@ public class PaymentController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String direction
-            ) {
+            @RequestParam(defaultValue = "desc") String direction) {
         log.info("GET all payments with filter: {}, page: {}, size: {}, sortBy: {}, direction: {}",
                 paymentFilterDto, page, size, sortBy, direction);
         Sort sort = direction.equalsIgnoreCase("asc")
@@ -94,8 +93,7 @@ public class PaymentController {
 
     @PutMapping("/{guid}")
     @PreAuthorize("hasRole('ADMIN')")
-    public PaymentDto update(@PathVariable UUID guid, @RequestBody
-    PaymentDto dto) {
+    public PaymentDto update(@PathVariable UUID guid, @RequestBody PaymentDto dto) {
         log.info("PUT update payment with id: {}, body: {}", guid, dto);
         PaymentDto updated = paymentService.update(guid, dto);
         log.debug("Sending response PaymentDto: {}", updated);
