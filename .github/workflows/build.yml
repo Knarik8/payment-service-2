@@ -22,6 +22,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Sanity check Docker
+        run: |
+          docker --version
+          docker info
+
       # Шаг 3: Компиляция проекта (без тестов)
       - name: Compile with Maven
         run: mvn -B clean compile

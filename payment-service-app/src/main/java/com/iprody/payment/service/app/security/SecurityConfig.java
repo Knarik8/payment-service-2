@@ -28,6 +28,7 @@ public class SecurityConfig {
 // настраиваем security-фильтры
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/payments/**").authenticated()
+                        .requestMatchers("/actuator/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
