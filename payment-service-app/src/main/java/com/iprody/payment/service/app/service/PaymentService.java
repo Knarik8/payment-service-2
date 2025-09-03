@@ -1,8 +1,11 @@
 package com.iprody.payment.service.app.service;
 
+import com.iprody.payment.service.app.async.AsyncSender;
+import com.iprody.payment.service.app.async.XPaymentAdapterRequestMessage;
 import com.iprody.payment.service.app.dto.PaymentDto;
 import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.mapper.PaymentMapper;
+import com.iprody.payment.service.app.mapper.XPaymentAdapterMapper;
 import com.iprody.payment.service.app.persistence.PaymentFilterDto;
 import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
 import com.iprody.payment.service.app.persistence.entity.Payment;
@@ -21,11 +24,17 @@ public class PaymentService {
 
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
+    private final XPaymentAdapterMapper xPaymentAdapterMapper;
+    private final AsyncSender<XPaymentAdapterRequestMessage> sender;
 
     @Autowired
-    public PaymentService(PaymentMapper paymentMapper, PaymentRepository paymentRepository) {
+    public PaymentService(PaymentMapper paymentMapper, PaymentRepository paymentRepository, XPaymentAdapterMapper
+            xPaymentAdapterMapper, AsyncSender<XPaymentAdapterRequestMessage>
+                                      sender) {
         this.paymentMapper = paymentMapper;
         this.paymentRepository = paymentRepository;
+        this.xPaymentAdapterMapper = xPaymentAdapterMapper;
+        this.sender = sender;
     }
 
     public PaymentDto getById(UUID guid) {
@@ -51,7 +60,13 @@ public class PaymentService {
     public PaymentDto create(PaymentDto dto) {
         Payment entity = paymentMapper.toEntity(dto);
         Payment saved = paymentRepository.save(entity);
-        return paymentMapper.toDto(saved);
+        PaymentDto resultDto = paymentMapper.toDto(saved);
+        // Отправка сообщения
+        XPaymentAdapterRequestMessage requestMessage =
+                xPaymentAdapterMapper.toXPaymentAdapterRequestMessage(entity);
+        sender.send(requestMessage);
+
+        return resultDto;
     }
 
     public PaymentDto update(UUID guid, PaymentDto dto) {
