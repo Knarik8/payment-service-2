@@ -16,6 +16,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      kafka:
+        image: bitnami/kafka:4.0.0
+        ports:
+          - 9092:9092
+        env:
+          KAFKA_CFG_LISTENERS: PLAINTEXT://:9092
+          KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+
     steps:
       # Шаг 1: Клонируем код
       - name: Checkout code
