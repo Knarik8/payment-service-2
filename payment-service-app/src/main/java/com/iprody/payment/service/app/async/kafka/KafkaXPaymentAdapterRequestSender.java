@@ -25,9 +25,13 @@ public class KafkaXPaymentAdapterRequestSender implements AsyncSender<XPaymentAd
     @Override
     public void send(XPaymentAdapterRequestMessage msg) {
         String key = msg.getPaymentGuid().toString(); // фиксируем партиционирование по платежу
-        log.info("Sending XPayment Adapter request: guid={}, amount={}, currency={} -> topic={}",
-                msg.getPaymentGuid(), msg.getAmount(),
-                msg.getCurrency(), topic);
+        log.info(
+                "Sending XPayment Adapter request: guid={}, amount={}, currency={} -> topic={}",
+                msg.getPaymentGuid(),
+                msg.getAmount(),
+                msg.getCurrency(),
+                topic
+        );
         template.send(topic, key, msg);
     }
 }
