@@ -3,6 +3,8 @@ package com.iprody.payment.service.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iprody.payment.service.app.AbstractPostgresIntegrationTest;
 import com.iprody.payment.service.app.TestJwtFactory;
+import com.iprody.payment.service.app.async.AsyncSender;
+import com.iprody.payment.service.app.async.XPaymentAdapterRequestMessage;
 import com.iprody.payment.service.app.dto.PaymentDto;
 import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
@@ -10,7 +12,9 @@ import com.iprody.payment.service.app.repository.PaymentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -19,6 +23,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -38,6 +44,10 @@ class PaymentControllerIntegrationTest extends AbstractPostgresIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private AsyncSender<XPaymentAdapterRequestMessage> sender;
+
     @Test
     void shouldReturnOnlyLiquibasePayments() throws Exception {
         //given-when
@@ -99,6 +109,8 @@ class PaymentControllerIntegrationTest extends AbstractPostgresIntegrationTest {
         assertThat(saved).isPresent();
         assertThat(saved.get().getCurrency()).isEqualTo("EUR");
         assertThat(saved.get().getAmount()).isEqualByComparingTo("123.45");
+        verify(sender).send(any(XPaymentAdapterRequestMessage.class));
+
     }
 
     @Test
