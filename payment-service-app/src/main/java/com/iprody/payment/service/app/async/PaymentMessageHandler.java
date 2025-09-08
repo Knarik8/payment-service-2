@@ -34,7 +34,9 @@ public class PaymentMessageHandler implements MessageHandler<XPaymentAdapterResp
         logger.info("Received response: paymentId={}, status={}, txId={}",
                 message.getPaymentGuid(), message.getStatus(), message.getTransactionRefId());
 
-        Payment payment = repository.getReferenceById(message.getPaymentGuid());
+        Payment payment = repository.findById(message.getPaymentGuid())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Payment not found: " + message.getPaymentGuid()));
         payment.setStatus(mapStatus(message.getStatus()));
         payment.setTransactionRefId(message.getTransactionRefId());
 
