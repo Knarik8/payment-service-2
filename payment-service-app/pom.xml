@@ -112,6 +112,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.iprody</groupId>
+			<artifactId>xpayment-adapter-app</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -178,6 +184,8 @@
 				</executions>
 				<configuration>
 					<configLocation>../checkstyle.xml</configLocation>
+					<includes>src/main/java/**/*.java</includes>
+					<excludes>target/generated-sources/**/*.java</excludes>
 					<encoding>UTF-8</encoding>
 					<consoleOutput>true</consoleOutput>
 					<failOnViolation>true</failOnViolation>

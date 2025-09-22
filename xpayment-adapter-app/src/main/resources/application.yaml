@@ -29,6 +29,12 @@ app:
         request: xpayment-adapter.requests
         response: xpayment-adapter.responses
 
+  rabbitmq:
+    exchange-name: payment-state-check-exchange
+    queue-name: payment-state-check-queue
+    max-retries: 60
+    interval-ms: 60000
+
   x-payment-api:
     client:
       url: http://localhost:9999
